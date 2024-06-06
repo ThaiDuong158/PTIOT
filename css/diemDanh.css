@@ -1,0 +1,29 @@
+
+
+.thead th,
+.thead td,
+.center {
+    text-align: center;
+    width: fit-content;
+}
+
+table th,
+table td {
+    align-content: center;
+}
+.content {
+    padding-top: 12px;
+    display: flex;
+    align-content: space-between;
+}
+.content .button {
+    display: flex;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+}
+
+.content .button .btn {
+    margin-right: 12px;
+    height: 40px;
+}

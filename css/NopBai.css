@@ -1,0 +1,107 @@
+.content {
+    padding-top: 12px;
+}
+
+.title,
+.content--title {
+    color: #c02424;
+}
+
+.title {
+    border: 1px solid #666;
+    border-radius: 2px;
+    height: fit-content;
+    padding: 12px;
+}
+
+.content-main {
+    margin-top: 30px;
+    border: 1px solid #666;
+    border-radius: 2px;
+    height: fit-content;
+    padding: 12px;
+}
+
+tr td:nth-child(1) {
+    width: 30%;
+}
+
+.btn--change {
+    margin: 12px auto;
+}
+
+.content--row {
+    padding: 8px 0;
+}
+
+#drop_zone {
+    margin: 12px 0;
+    padding: 8px;
+    border: 1px #666 dashed;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#file_list {
+    max-height: 120px;
+    /* Đặt chiều cao tối đa */
+    overflow-y: auto;
+    /* Thiết lập cuộn dọc */
+    padding: 0;
+}
+
+#drop_zone_text {
+    text-align: center;
+}
+
+#file_list p {
+    padding: 8px 12px;
+    margin-bottom: 0;
+}
+
+#file_list p:nth-child(2n-1) {
+    background-color: #837f7f;
+    color: #fff;
+}
+
+.kiemTra,
+.kiemTra-list,
+.kiemTra-list a {
+    border: 1px solid #c6c6c6;
+}
+
+.kiemTra {
+    padding: 8px 16px;
+}
+
+.kiemTra-list {
+    padding: 16px;
+    margin: 0 16px;
+    position: sticky;
+}
+
+.kiemTra-list a {
+    text-decoration: none;
+    padding: 8px;
+    margin: 16px 4px;
+    color: #c6c6c6;
+    font-size: 16px;
+}
+
+.kiemTra-list a:hover {
+    background-color: #c6c6c6;
+    color: #fff;
+}
+
+.cau {
+    margin: 8px 0;
+}
+
+.nopBai {
+    margin: 8px auto;
+    text-align: center;
+    display: flex;
+}

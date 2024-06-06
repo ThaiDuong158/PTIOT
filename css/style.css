@@ -1,0 +1,23 @@
+@import url(./header.css);
+@import url(./navbar.css);
+@import url(./footer.css);
+
+body {
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --heightHeader: 50px;
+    --greenHeader: #00a65a;
+    --heightFooter: 90px;
+}
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}

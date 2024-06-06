@@ -1,0 +1,17 @@
+.footer {
+    font-size: 12px;
+    padding: 15px;
+    height: var(--heightFooter);
+}
+
+.footer p {
+    margin: 0;
+}
+
+.footer__left {
+    width: fit-content;
+}
+
+.footer__right {
+    width: fit-content;
+}
