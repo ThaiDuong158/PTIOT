@@ -1,26 +1,34 @@
 <?php
-    // Kết nối đến cơ sở dữ liệu
-    include "../TrangMau/connSql.php";
+// Kết nối đến cơ sở dữ liệu
+include "../TrangMau/connSql.php";
 
-    // Lấy dữ liệu từ yêu cầu Ajax
-    $nhietDo = $_POST['nhietDo'];
-    $doAm = $_POST['doAm'];
+// Lấy dữ liệu từ yêu cầu Ajax
+$nhietDo_TT = $_POST['nhietDo_TT'];
+$doAm_TT = $_POST['doAm_TT'];
+$nhietDo_CG = $_POST['nhietDo_CG'];
+$doAm_CG = $_POST['doAm_CG'];
 
-    // Chuẩn bị câu lệnh SQL
+// Hàm để chèn dữ liệu vào cơ sở dữ liệu
+function insertData($conn, $idThietBi, $nhietDo, $doAm) {
     $sql = "INSERT INTO `dht` (`idThietBi`, `nhietDo`, `doAm`, `thoiGian`) 
-            VALUES ('1', ?, ?, current_timestamp())";
+            VALUES (?, ?, ?, current_timestamp())";
 
-    // Thực thi câu lệnh SQL sử dụng PDO
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ss', $nhietDo, $doAm);
+    $stmt->bind_param('iss', $idThietBi, $nhietDo, $doAm);
 
-    // Kiểm tra và thực thi câu lệnh SQL
     if ($stmt->execute()) {
         echo "Dữ liệu đã được thêm vào cơ sở dữ liệu thành công.";
     } else {
         echo "Lỗi: " . $sql . "<br>" . $conn->error;
     }
+}
 
-    // Đóng kết nối cơ sở dữ liệu
-    $conn = null;
+// Chèn dữ liệu cho thiết bị 1
+insertData($conn, 1, $nhietDo_TT, $doAm_TT);
+
+// Chèn dữ liệu cho thiết bị 2
+insertData($conn, 2, $nhietDo_CG, $doAm_CG);
+
+// Đóng kết nối cơ sở dữ liệu
+$conn = null;
 ?>

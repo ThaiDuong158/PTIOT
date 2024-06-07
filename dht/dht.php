@@ -16,25 +16,39 @@
         <div class="row">
             <?php include '../TrangMau/sidebar.php'; ?>
             <div class="col bg-light d-flex flex-column justify-content-between">
-                <div class="content row container-fluid" style="height: 100px;">
+                <div class="content row container-fluid">
                     <div class="content--thoiTiet content--region">
                         <h1 class="content--title">Điều khiển nhiệt độ motor</h1>
-                        <div class="row">
-                            <div class="col-6 container-fluid">
+                        <div class="row d-inline-flex container-fluid flex-wrap">
+                            <div class="content--item col-6 container-fluid">
                                 <!-- <span class="content--item">Nhiệt độ: <p id="nhietDo">0 độ C</p></span> -->
                                 <canvas id="myChart" class="myChart container-fluid"></canvas>
                                 <h5 class="chart--title">Biểu đồ hiển thị nhiệt độ</h5>
                             </div>
-                            <div class="col-6 container-fluid">
+                            <div class="content--item col-6 container-fluid">
                                 <!-- <span class="content--item">Độ ẩm: <p id="doAm">0 %</p></span> -->
                                 <canvas id="myChart2" class="myChart container-fluid"></canvas>
                                 <h5 class="chart--title">Biểu đồ hiển thị độ ẩm</h5>
                             </div>
                         </div>
+                        <h5>Nhập ngưỡng nhiệt độ để bật motor <input type="number" class="input__nguong" name="nhietDoThoiThiet" min="0" max="100" id=""> độ C </h5>
                     </div>
-                    <!-- <div class="content--chuongGa content--region">
+                    <div class="content--chuongGa content--region">
                         <h1 class="content--title">Điều khiển nhiệt độ chuồng gà</h1>
-                    </div> -->
+                        <div class="row d-inline-flex container-fluid flex-wrap">
+                            <div class="content--item col-6 container-fluid">
+                                <!-- <span class="content--item">Nhiệt độ: <p id="nhietDo">0 độ C</p></span> -->
+                                <canvas id="myChart3" class="myChart container-fluid"></canvas>
+                                <h5 class="chart--title">Biểu đồ hiển thị nhiệt độ</h5>
+                            </div>
+                            <div class="content--item col-6 container-fluid">
+                                <!-- <span class="content--item">Độ ẩm: <p id="doAm">0 %</p></span> -->
+                                <canvas id="myChart4" class="myChart container-fluid"></canvas>
+                                <h5 class="chart--title">Biểu đồ hiển thị độ ẩm</h5>
+                            </div>
+                        </div>
+                        <h5>Nhập ngưỡng nhiệt độ để thông báo <input type="number" class="input__nguong" name="nhietDoChuongGa" min="0" max="100" id=""> độ C </h5>
+                    </div>
                 </div>
                 <?php include '../TrangMau/footer.php'; ?>
                 <?php include '../TrangMau/hideSidebar.php'; ?>
@@ -61,9 +75,11 @@
                 }
             }
 
-            function sendDataToServer(doC, doH) {
-                var nhietDo = doC;
-                var doAm = doH;
+            function sendDataToServer(doC_TT, doH_TT, doC_CG, doH_CG) {
+                var nhietDo_TT = doC_TT;
+                var doAm_TT = doH_TT;
+                var nhietDo_CG = doC_CG;
+                var doAm_CG = doH_CG;
 
                 var xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function () {
@@ -73,22 +89,27 @@
                 };
                 xhttp.open("POST", "update_data.php", true);
                 xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhttp.send("nhietDo=" + nhietDo + "&doAm=" + doAm);
+                xhttp.send("nhietDo_TT=" + nhietDo_TT + "&doAm_TT=" + doAm_TT + "&nhietDo_CG=" + nhietDo_CG + "&doAm_CG=" + doAm_CG);
             }
 
             function onMessageArrived(message) {
                 console.log("onMessageArrived:" + message.payloadString);
                 JSON.parse(message.payloadString)
                 const data = JSON.parse(message.payloadString);
-                var doC = Number.parseFloat(data["nhietDo"]).toFixed(0)
-                var doH = Number.parseFloat(data["doAm"]).toFixed(0)
+                var doC_TT = Number.parseFloat(data["nhietDoThoiTiet"]).toFixed(0)
+                var doH_TT = Number.parseFloat(data["doAmThoiTiet"]).toFixed(0)
+                var doC_CG = Number.parseFloat(data["nhietDoChuongGa"]).toFixed(0)
+                var doH_CG = Number.parseFloat(data["doAmChuongGa"]).toFixed(0)
                 const formattedDate = formatDate();
                 chartData.labels.push(`${formattedDate}`);
-                chartData.values[0].push(doC);
-                chartData.values[1].push(doH);
+                chartData.values[0].push(doC_TT);
+                chartData.values[1].push(doH_TT);
+                chartData.values[2].push(doC_CG);
+                chartData.values[3].push(doH_CG);
+                console.log(chartData);
                 // Vẽ biểu đồ mới
                 drawCharts(chartData);
-                sendDataToServer(doC, doH);
+                sendDataToServer(doC_TT, doH_TT, doC_CG, doH_CG);
             }
 
             function formatDate() {
@@ -130,7 +151,7 @@
                     myCharts[i] = new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: data.labels,
+                            labels: data.labels[i],
                             datasets: [{
                                 label: 'Độ C',
                                 data: data.values[i],

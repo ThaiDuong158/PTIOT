@@ -9,11 +9,13 @@ const sidebarWidths = $$('.sidebar-width')
 const sidebarBtn = $('.sidebar-mini')
 const sidebarItems = $$('.sidebar-item')
 const dropdownList = $('.dropdown-list')
+const intputNguongs = $$('.input__nguong')
 
-let contentDefaultHeight = content.clientHeight
+// let contentDefaultHeight = content.clientHeight
 
 function updateContentHeight() {
     // const totalHeight = footer.clientHeight;
+    let contentDefaultHeight = content.clientHeight
     const contentHeight = window.innerHeight - header.clientHeight - footer.clientHeight;
     if (contentDefaultHeight < contentHeight) {
         content.style.height = contentHeight + "px";
@@ -51,4 +53,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     dropdownList.style.right = `calc(100% - ${$('.header__login').clientWidth}px)`;
+});
+
+inputNguongs.forEach((inputNguong) => {
+    const min = -40;
+    const max = 80;
+    
+    // Đặt giá trị mặc định
+    inputNguong.value = 0;
+
+    inputNguong.onfocusout = () => {
+        // Kiểm tra xem giá trị nhập vào có phải là số không
+        if (isNaN(inputNguong.value)) {
+            inputNguong.value = 0; // Đặt lại giá trị mặc định nếu không phải số
+        } else {
+            // Kiểm tra giá trị nhập vào
+            if (inputNguong.value > max) {
+                inputNguong.value = max;
+            }
+            if (inputNguong.value < min) {
+                inputNguong.value = min;
+            }
+        }
+    }
 });

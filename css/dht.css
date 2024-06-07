@@ -10,15 +10,15 @@
     text-align: center;
 }
 .content--item {
-    display: inline-flex;
-}
-
-.content--item p {
-    margin-bottom: 0;
-    /* padding-left: 8px; */
+    width: fit-content;
 }
 
 .chart--title {
     text-align: center;
     padding-top: 8px;
+}
+
+.myChart {
+    height: 300px!important;
+    width: 600px!important;
 }
