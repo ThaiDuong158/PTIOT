@@ -20,19 +20,21 @@
                     <div class="content--thoiTiet content--region">
                         <h1 class="content--title">Điều khiển nhiệt độ motor</h1>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-6 container-fluid">
                                 <!-- <span class="content--item">Nhiệt độ: <p id="nhietDo">0 độ C</p></span> -->
-                                <canvas id="myChart" class="container-fluid"></canvas>
+                                <canvas id="myChart" class="myChart container-fluid"></canvas>
+                                <h5 class="chart--title">Biểu đồ hiển thị nhiệt độ</h5>
                             </div>
-                            <div class="col">
+                            <div class="col-6 container-fluid">
                                 <!-- <span class="content--item">Độ ẩm: <p id="doAm">0 %</p></span> -->
-                                <canvas id="myChart2" class="container-fluid"></canvas>
+                                <canvas id="myChart2" class="myChart container-fluid"></canvas>
+                                <h5 class="chart--title">Biểu đồ hiển thị độ ẩm</h5>
                             </div>
                         </div>
                     </div>
-                    <div class="content--chuongGa content--region">
+                    <!-- <div class="content--chuongGa content--region">
                         <h1 class="content--title">Điều khiển nhiệt độ chuồng gà</h1>
-                    </div>
+                    </div> -->
                 </div>
                 <?php include '../TrangMau/footer.php'; ?>
                 <?php include '../TrangMau/hideSidebar.php'; ?>
@@ -80,13 +82,22 @@
                 const data = JSON.parse(message.payloadString);
                 var doC = Number.parseFloat(data["nhietDo"]).toFixed(0)
                 var doH = Number.parseFloat(data["doAm"]).toFixed(0)
-                const date = new Date();
-                const formattedDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+                const formattedDate = formatDate();
                 chartData.labels.push(`${formattedDate}`);
-                chartData.values.push(doC);
+                chartData.values[0].push(doC);
+                chartData.values[1].push(doH);
                 // Vẽ biểu đồ mới
-                drawChart(chartData);
+                drawCharts(chartData);
                 sendDataToServer(doC, doH);
+            }
+
+            function formatDate() {
+                const date = new Date();
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${day}-${month} ${hours}:${minutes}`;
             }
 
             function sendMessage(stMessage) {
@@ -96,7 +107,6 @@
             }
         </script>
         <script>
-            var ctx = document.getElementById('myChart').getContext('2d');
             var chartData = [];
 
             // Sử dụng Ajax để gửi yêu cầu tới tệp PHP xử lý dữ liệu
@@ -104,42 +114,43 @@
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     chartData = JSON.parse(this.responseText);
-                    drawChart(chartData);
+                    drawCharts(chartData);
                 }
             };
             xhttp.open("GET", "get_data.php", true);
             xhttp.send();
-            var myChart;
-
-            function drawChart(data) {
-                // Hủy biểu đồ cũ nếu tồn tại
-                if (myChart) {
-                    myChart.destroy();
-                }
-
-                // Khởi tạo biểu đồ mới
-                var ctx = document.getElementById('myChart').getContext('2d');
-                myChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data.labels,
-                        datasets: [{
-                            label: 'Độ C',
-                            data: data.values,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+            var myCharts = [];
+            function drawCharts(data) {
+                var ctxs = document.querySelectorAll(".myChart");
+                ctxs.forEach((ctx, i) => {
+                    if (myCharts[i]) {
+                        myCharts[i].destroy();
+                    }
+                    ctx = ctx.getContext('2d');
+                    myCharts[i] = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Độ C',
+                                data: data.values[i],
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
                             }
                         }
-                    }
+                    });
                 });
             }
+
+
         </script>
     </div>
     <script src="../js/main.js"></script>
